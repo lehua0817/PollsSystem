@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.template import loader
 
 from polls.models import Question
@@ -25,16 +25,17 @@ def index(request):
 
 
 def detail(request, question_id):
-    question = Question.objects.get(id=question_id)
+    try:
+        question = Question.objects.get(pk=question_id)
+    except Question.DoesNotExist:
+        raise Http404("Question does not exist")
 
     choice_list = question.choice_set.all()
-    # 获取
-    template = loader.get_template('polls/question_detail.html')
     context = {
         'question': question,
         'choice_list': choice_list,
     }
-    return HttpResponse(template.render(context, request))
+    return render(request, 'polls/question_detail.html', context)
 
 
 def result(request, question_id):
