@@ -1,0 +1,11 @@
+{% if question %}
+    <p>问题：{{ question.question_text }}</p>
+{% endif %}
+
+{% if choice_list %}
+    <ul>
+        {% for choice in choice_list %}
+            <li>{{ choice.choice_text }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
